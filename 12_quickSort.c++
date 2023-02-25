@@ -1,64 +1,77 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-int partation(int *arr, int s, int e)
+int partation(vector<int> &nums, int start, int end)
 {
-    int pivot = arr[s];
+    int pivot = nums[0];
     int cnt = 0;
-    for (int i = 0; i <= e; i++)
+
+    for (int i = start + 1; i < nums.size(); i++)
     {
-        if (arr[i] <= pivot)
+        if (nums[i] <= pivot)
         {
             cnt++;
         }
     }
 
-    int pivotIndex = s + cnt;
-    swap(pivot, arr[pivotIndex]);
-
-    int i = s;
-    int j = e;
+    int pivotIndex = start + cnt;
+    swap(  nums[pivotIndex],nums[start]);
+    // cout << pivotIndex;
+    int i = start;
+    int j = end ;
+     
 
     while (i < pivotIndex && j > pivotIndex)
     {
-        while (arr[i] <= pivot)
+        if (nums[i] <= pivot)
         {
             i++;
         }
 
-        while (arr[j] > pivot)
+        if (nums[j] > pivot)
         {
             j--;
         }
 
         if (i < pivotIndex && j > pivotIndex)
         {
-            swap(arr[i++], arr[j--]);
+            swap(nums[i++], nums[j--]);
         }
     }
+
     return pivotIndex;
 }
-void quickSort(int *arr, int s, int e)
+
+void print(vector<int>nums){
+    for(int i=0;i<nums.size();i++){
+        cout<<nums[i]<<" ";
+    }
+    cout<<endl;
+}
+
+void quickSort(vector<int> &nums, int start, int end)
 {
-    if (s >= e)
+    //Base Condition
+    if (start >= end)
     {
         return;
     }
-
-    int p = partation(arr, s, p);
-    quickSort(arr, s, p - 1);
-    quickSort(arr, p + 1, e);
+    int p = partation(nums, start, end);
+    
+    quickSort(nums, start, p);
+    quickSort(nums, p + 1, end);
 }
+
 int main()
 {
-    int arr[] = {6, 5, 4, 3, 2, 1};
-    int start = 0;
-    int end = 5;
-    quickSort(arr, start, end);
+    vector<int> nums{5, 2, 3, 1};
+    cout << "Array before sorting" << endl;
+    print(nums);
      
-    for (int i = 0; i < 6; i++)
-    {
-        cout << arr[i] << " ";
-    }
+    quickSort(nums, 0, 3);
+    cout<<endl;
+     cout << "Array After sorting" << endl;
+     print(nums);
     return 0;
 }
